@@ -1,0 +1,59 @@
+name: gramaconnect
+description: A Flutter mobile app for Grama Niladhari services portal
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
+  # State Management
+  provider: ^6.1.1
+  
+  # HTTP requests
+  http: ^1.1.0
+  
+  # Local storage
+  shared_preferences: ^2.2.2
+  
+  # UI components
+  cupertino_icons: ^1.0.6
+  
+  # Internationalization
+  intl: ^0.20.2
+  
+  # Icons
+  font_awesome_flutter: ^10.6.0
+  
+  # Image handling
+  cached_network_image: ^3.3.0
+  
+  # URL launcher
+  url_launcher: ^6.2.1
+  
+  # File picker
+  file_picker: ^6.1.1
+  
+  # Permission handler
+  permission_handler: ^11.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/l10n/
