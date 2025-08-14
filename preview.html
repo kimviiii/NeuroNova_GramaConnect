@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GramaConnect - Sri Lankan Government App Preview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #800000 0%, #a52a2a 100%);
+            min-height: 100vh;
+            color: #202124;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            background: #FFF5E1;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            background: #800000;
+            color: white;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(128, 0, 0, 0.1);
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #800000;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #800000;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #5F6368;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #202124;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #800000;
+            box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: #800000;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #600000;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #00B8A9;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            border-color: #00B8A9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,184,169,0.2);
+        }
+
+        .service-icon {
+            font-size: 32px;
+            color: #800000;
+            margin-bottom: 8px;
+        }
+
+        .service-title {
+            font-weight: 600;
+            color: #202124;
+            font-size: 14px;
+        }
+
+        .bottom-nav {
+            background: white;
+            border-top: 2px solid #e0e0e0;
+            padding: 12px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #5F6368;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: #800000;
+        }
+
+        .status-badge {
+            background: #1E8E3E;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .government-header {
+            background: linear-gradient(45deg, #800000, #a52a2a);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="government-header">
+            🏛️ Government of Sri Lanka - Grama Niladhari Services
+        </div>
+        
+        <div class="header">
+            <h1>GramaConnect</h1>
+        </div>
+        
+        <div class="content">
+            <div class="welcome-card">
+                <div class="logo-container">
+                    <div class="logo">🏛️</div>
+                    <div class="title">Sri Lankan Government Portal</div>
+                    <div class="subtitle">Professional. Secure. Efficient.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" placeholder="Enter your full name" value="Kalana Kivindu">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">National ID</label>
+                    <input type="text" class="form-input" placeholder="Enter your NIC number" value="123456789V">
+                </div>
+                
+                <button class="btn-primary">Register Account</button>
+                <div class="status-badge">✓ Secure Government Portal</div>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📋</div>
+                    <div class="service-title">Documents</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📝</div>
+                    <div class="service-title">Applications</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💬</div>
+                    <div class="service-title">Complaints</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📢</div>
+                    <div class="service-title">Announcements</div>
+                </div>
+            </div>
+
+            <button class="btn-secondary">View Service Status</button>
+            <button class="btn-secondary">Contact Support</button>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div>🏠</div>
+                <div style="font-size: 10px;">Home</div>
+            </div>
+            <div class="nav-item">
+                <div>🏢</div>
+                <div style="font-size: 10px;">Services</div>
+            </div>
+            <div class="nav-item">
+                <div>💬</div>
+                <div style="font-size: 10px;">Complaints</div>
+            </div>
+            <div class="nav-item">
+                <div>📢</div>
+                <div style="font-size: 10px;">News</div>
+            </div>
+            <div class="nav-item">
+                <div>👤</div>
+                <div style="font-size: 10px;">Profile</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
