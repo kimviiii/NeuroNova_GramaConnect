@@ -90,6 +90,34 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  // Multi-step registration method
+  Future<bool> registerWithFullData(Map<String, dynamic> userData) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final user = await ApiService.registerWithFullData(userData);
+      if (user != null) {
+        _user = user;
+        await _saveUserToStorage(user);
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        _errorMessage = 'Registration failed';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _errorMessage = 'Registration failed: ${e.toString()}';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<void> logout() async {
     _user = null;
     final prefs = await SharedPreferences.getInstance();

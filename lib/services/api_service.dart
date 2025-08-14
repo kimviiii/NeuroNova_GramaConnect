@@ -98,6 +98,43 @@ class ApiService {
     }
   }
 
+  // Multi-step registration endpoint
+  static Future<User?> registerWithFullData(Map<String, dynamic> userData) async {
+    try {
+      print('🔍 Attempting multi-step registration to: $baseUrl/api/auth/register');
+      print('📤 Registration data: $userData');
+
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/auth/register'),
+            headers: headers,
+            body: jsonEncode(userData),
+          )
+          .timeout(timeoutDuration);
+
+      print('📡 Registration response status: ${response.statusCode}');
+      print('📡 Registration response body: ${response.body}');
+
+      if (response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        // Create user with token from backend response
+        final userResponse = data['user'];
+        userResponse['token'] = data['token']; // Add token to user data
+        return User.fromJson(userResponse);
+      } else {
+        final errorData = jsonDecode(response.body);
+        throw Exception(errorData['error'] ?? 'Registration failed');
+      }
+    } catch (e) {
+      print('❌ Registration error: $e');
+      if (e.toString().contains('SocketException')) {
+        throw Exception(
+            'Network error: Cannot connect to server. Make sure the backend is running on $baseUrl');
+      }
+      throw Exception('Network error: $e');
+    }
+  }
+
   // Services endpoints
   static Future<List<Map<String, dynamic>>> getServices() async {
     try {
