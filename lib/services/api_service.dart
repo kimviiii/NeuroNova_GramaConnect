@@ -1,9 +1,24 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/user.dart';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://127.0.0.1:5000';
+  // Dynamic base URL based on platform
+  static String get baseUrl {
+    if (kIsWeb) {
+      // For web development
+      return 'http://127.0.0.1:5000';
+    } else if (Platform.isAndroid) {
+      // For Android emulator (maps to host's 127.0.0.1)
+      return 'http://10.0.2.2:5000';
+    } else {
+      // For iOS simulator and other platforms
+      return 'http://127.0.0.1:5000';
+    }
+  }
+  
   static const Duration timeoutDuration = Duration(seconds: 30);
 
   static Map<String, String> get headers => {
@@ -14,6 +29,8 @@ class ApiService {
   // Authentication endpoints
   static Future<User?> login(String email, String password) async {
     try {
+      print('🔍 Attempting login to: $baseUrl/api/auth/login');
+      
       final response = await http
           .post(
             Uri.parse('$baseUrl/api/auth/login'),
@@ -25,6 +42,9 @@ class ApiService {
           )
           .timeout(timeoutDuration);
 
+      print('📡 Response status: ${response.statusCode}');
+      print('📡 Response body: ${response.body}');
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return User.fromJson(data['user']);
@@ -33,6 +53,10 @@ class ApiService {
         throw Exception(errorData['error'] ?? 'Login failed');
       }
     } catch (e) {
+      print('❌ Login error: $e');
+      if (e.toString().contains('SocketException')) {
+        throw Exception('Network error: Cannot connect to server. Make sure the backend is running on $baseUrl');
+      }
       throw Exception('Network error: $e');
     }
   }
