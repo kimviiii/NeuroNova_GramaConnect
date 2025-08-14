@@ -60,3 +60,4 @@ venv.bak/
 *.sqlite
 *.db
 instance/
+back-end/.venv/
