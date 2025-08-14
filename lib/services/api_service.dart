@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class ApiService {
-  static const String baseUrl = 'https://api.gramaconnect.gov.lk';
+  static const String baseUrl = 'http://127.0.0.1:5000';
   static const Duration timeoutDuration = Duration(seconds: 30);
 
   static Map<String, String> get headers => {
@@ -16,7 +16,7 @@ class ApiService {
     try {
       final response = await http
           .post(
-            Uri.parse('$baseUrl/auth/login'),
+            Uri.parse('$baseUrl/api/auth/login'),
             headers: headers,
             body: jsonEncode({
               'email': email,
@@ -29,36 +29,32 @@ class ApiService {
         final data = jsonDecode(response.body);
         return User.fromJson(data['user']);
       } else {
-        throw Exception('Login failed: ${response.statusCode}');
+        final errorData = jsonDecode(response.body);
+        throw Exception(errorData['error'] ?? 'Login failed');
       }
     } catch (e) {
-      // For demo purposes, return a mock user
-      if (email == 'demo@gramaconnect.lk' && password == 'demo123') {
-        return User(
-          id: 'demo-user-1',
-          name: 'Demo User',
-          email: email,
-          phone: '+94771234567',
-          role: 'citizen',
-          createdAt: DateTime.now(),
-        );
-      }
       throw Exception('Network error: $e');
     }
   }
 
-  static Future<User?> register(
-      String name, String email, String password) async {
+  static Future<User?> register(String name, String email, String password,
+      {String? phone, String? address, String? nic}) async {
     try {
+      final body = {
+        'name': name,
+        'email': email,
+        'password': password,
+      };
+
+      if (phone != null && phone.isNotEmpty) body['phone'] = phone;
+      if (address != null && address.isNotEmpty) body['address'] = address;
+      if (nic != null && nic.isNotEmpty) body['nic'] = nic;
+
       final response = await http
           .post(
-            Uri.parse('$baseUrl/auth/register'),
+            Uri.parse('$baseUrl/api/auth/register'),
             headers: headers,
-            body: jsonEncode({
-              'name': name,
-              'email': email,
-              'password': password,
-            }),
+            body: jsonEncode(body),
           )
           .timeout(timeoutDuration);
 
@@ -66,17 +62,11 @@ class ApiService {
         final data = jsonDecode(response.body);
         return User.fromJson(data['user']);
       } else {
-        throw Exception('Registration failed: ${response.statusCode}');
+        final errorData = jsonDecode(response.body);
+        throw Exception(errorData['error'] ?? 'Registration failed');
       }
     } catch (e) {
-      // For demo purposes, create a mock user
-      return User(
-        id: 'user-${DateTime.now().millisecondsSinceEpoch}',
-        name: name,
-        email: email,
-        role: 'citizen',
-        createdAt: DateTime.now(),
-      );
+      throw Exception('Network error: $e');
     }
   }
 

@@ -6,6 +6,7 @@ import 'providers/language_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/auth/register_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/services/services_screen.dart';
 import 'screens/complaints/complaints_screen.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
           routes: {
             '/': (context) => const SplashScreen(),
             '/login': (context) => const LoginScreen(),
+            '/register': (context) => const RegisterScreen(),
             '/home': (context) => const HomeScreen(),
             '/services': (context) => const ServicesScreen(),
             '/complaints': (context) => const ComplaintsScreen(),

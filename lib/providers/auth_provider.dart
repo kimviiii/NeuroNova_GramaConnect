@@ -60,13 +60,15 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> register(String name, String email, String password) async {
+  Future<bool> register(String name, String email, String password,
+      {String? phone, String? address, String? nic}) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final user = await ApiService.register(name, email, password);
+      final user = await ApiService.register(name, email, password,
+          phone: phone, address: address, nic: nic);
       if (user != null) {
         _user = user;
         await _saveUserToStorage(user);
