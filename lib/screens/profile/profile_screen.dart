@@ -15,6 +15,15 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Container(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 48,
+            height: 48,
+            fit: BoxFit.contain,
+          ),
+        ),
         title: Text(localizations?.profile ?? 'Profile'),
         actions: [
           IconButton(
