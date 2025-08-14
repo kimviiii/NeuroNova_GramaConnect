@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/app_localizations.dart';
+import 'marriage_certificate_screen.dart';
 
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
@@ -25,13 +26,18 @@ class ServicesScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           _ServiceCard(
-            icon: Icons.article_outlined,
-            title: localizations?.birthCertificate ?? 'Birth Certificate',
-            description: 'Apply for a new birth certificate',
-            fee: 'LKR 500',
-            color: Colors.blue,
+            icon: Icons.favorite_outlined,
+            title: 'Marriage Certificate',
+            description: 'Apply for an official marriage certificate',
+            fee: 'LKR 1,000',
+            color: Colors.red,
             onTap: () {
-              // Handle service selection
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MarriageCertificateScreen(),
+                ),
+              );
             },
           ),
           _ServiceCard(
@@ -42,28 +48,17 @@ class ServicesScreen extends StatelessWidget {
             fee: 'LKR 300',
             color: Colors.green,
             onTap: () {
-              // Handle service selection
+              // TODO: Add character certificate screen
             },
           ),
           _ServiceCard(
-            icon: Icons.money_outlined,
-            title: localizations?.incomeCertificate ?? 'Income Certificate',
-            description: 'Apply for an income certificate',
-            fee: 'LKR 200',
-            color: Colors.orange,
+            icon: Icons.how_to_vote_outlined,
+            title: 'Voter Registration Update',
+            description: 'Update voter registration details',
+            fee: 'Free',
+            color: Colors.blue,
             onTap: () {
-              // Handle service selection
-            },
-          ),
-          _ServiceCard(
-            icon: Icons.home_outlined,
-            title:
-                localizations?.residenceCertificate ?? 'Residence Certificate',
-            description: 'Apply for a residence certificate',
-            fee: 'LKR 250',
-            color: Colors.purple,
-            onTap: () {
-              // Handle service selection
+              // TODO: Add voter registration screen
             },
           ),
         ],

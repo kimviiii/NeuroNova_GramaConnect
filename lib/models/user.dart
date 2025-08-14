@@ -7,6 +7,7 @@ class User {
   final String? nic;
   final String role;
   final DateTime? createdAt;
+  final String? token;
 
   User({
     required this.id,
@@ -17,6 +18,7 @@ class User {
     this.nic,
     this.role = 'citizen',
     this.createdAt,
+    this.token,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class User {
       address: json['address'],
       nic: json['nic'],
       role: json['role'] ?? 'citizen',
+      token: json['token'],
       createdAt:
           json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
     );

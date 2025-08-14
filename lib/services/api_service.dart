@@ -47,7 +47,10 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return User.fromJson(data['user']);
+        // Create user with token from backend response
+        final userData = data['user'];
+        userData['token'] = data['token']; // Add token to user data
+        return User.fromJson(userData);
       } else {
         final errorData = jsonDecode(response.body);
         throw Exception(errorData['error'] ?? 'Login failed');
@@ -218,6 +221,138 @@ class ApiService {
               .toIso8601String(),
         },
       ];
+    }
+  }
+
+  // Government Services endpoints
+  static Future<Map<String, dynamic>> submitMarriageCertificate({
+    required String token,
+    required Map<String, dynamic> applicationData,
+  }) async {
+    try {
+      print('🔍 Submitting marriage certificate to: $baseUrl/api/services/marriage-certificate');
+
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/services/marriage-certificate'),
+            headers: {
+              ...headers,
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode(applicationData),
+          )
+          .timeout(timeoutDuration);
+
+      print('📡 Marriage Certificate Response: ${response.statusCode}');
+      print('📡 Response body: ${response.body}');
+
+      if (response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        return data;
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['error'] ?? 'Failed to submit marriage certificate application');
+      }
+    } catch (e) {
+      print('❌ Marriage Certificate Error: $e');
+      throw Exception('Failed to submit application: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> submitCharacterCertificate({
+    required String token,
+    required Map<String, dynamic> applicationData,
+  }) async {
+    try {
+      print('🔍 Submitting character certificate to: $baseUrl/api/services/character-certificate');
+
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/services/character-certificate'),
+            headers: {
+              ...headers,
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode(applicationData),
+          )
+          .timeout(timeoutDuration);
+
+      print('📡 Character Certificate Response: ${response.statusCode}');
+
+      if (response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        return data;
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['error'] ?? 'Failed to submit character certificate application');
+      }
+    } catch (e) {
+      print('❌ Character Certificate Error: $e');
+      throw Exception('Failed to submit application: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> submitVoterRegistration({
+    required String token,
+    required Map<String, dynamic> applicationData,
+  }) async {
+    try {
+      print('🔍 Submitting voter registration to: $baseUrl/api/services/voter-registration');
+
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/api/services/voter-registration'),
+            headers: {
+              ...headers,
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode(applicationData),
+          )
+          .timeout(timeoutDuration);
+
+      print('📡 Voter Registration Response: ${response.statusCode}');
+
+      if (response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        return data;
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['error'] ?? 'Failed to submit voter registration update');
+      }
+    } catch (e) {
+      print('❌ Voter Registration Error: $e');
+      throw Exception('Failed to submit application: $e');
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getUserApplications({
+    required String token,
+  }) async {
+    try {
+      print('🔍 Getting user applications from: $baseUrl/api/services/applications');
+
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/api/services/applications'),
+            headers: {
+              ...headers,
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(timeoutDuration);
+
+      print('📡 Applications Response: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return List<Map<String, dynamic>>.from(data['applications']);
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['error'] ?? 'Failed to get applications');
+      }
+    } catch (e) {
+      print('❌ Get Applications Error: $e');
+      throw Exception('Failed to get applications: $e');
     }
   }
 }
