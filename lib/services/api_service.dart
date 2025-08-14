@@ -18,7 +18,7 @@ class ApiService {
       return 'http://127.0.0.1:5000';
     }
   }
-  
+
   static const Duration timeoutDuration = Duration(seconds: 30);
 
   static Map<String, String> get headers => {
@@ -30,7 +30,7 @@ class ApiService {
   static Future<User?> login(String email, String password) async {
     try {
       print('🔍 Attempting login to: $baseUrl/api/auth/login');
-      
+
       final response = await http
           .post(
             Uri.parse('$baseUrl/api/auth/login'),
@@ -55,7 +55,8 @@ class ApiService {
     } catch (e) {
       print('❌ Login error: $e');
       if (e.toString().contains('SocketException')) {
-        throw Exception('Network error: Cannot connect to server. Make sure the backend is running on $baseUrl');
+        throw Exception(
+            'Network error: Cannot connect to server. Make sure the backend is running on $baseUrl');
       }
       throw Exception('Network error: $e');
     }
