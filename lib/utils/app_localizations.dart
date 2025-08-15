@@ -79,6 +79,8 @@ class AppLocalizations {
   String get documentUpload => translate('document_upload');
   String get applicationStatus => translate('application_status');
   String get paymentDetails => translate('payment_details');
+  String get marriageCertificate => translate('marriage_certificate');
+  String get voterRegistration => translate('voter_registration');
 
   // Complaint related
   String get submitComplaint => translate('submit_complaint');

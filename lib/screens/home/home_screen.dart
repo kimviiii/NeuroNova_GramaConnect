@@ -90,7 +90,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Container(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(10.0),
           child: Image.asset(
             'assets/images/logo.png',
             width: 48,
@@ -115,44 +115,55 @@ class HomePage extends StatelessWidget {
           children: [
             // Welcome Card
             Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: Text(
-                        user?.name.substring(0, 1).toUpperCase() ?? 'U',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/profile');
+                    },
+
+
+
+                    leading: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
                         children: [
-                          Text(
-                            '${localizations?.translate('welcome_message') ?? 'Welcome'}, ${user?.name ?? 'User'}!',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Text(
+                              user?.name.substring(0, 1).toUpperCase() ?? 'U',
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            localizations?.translate('welcome_subtitle') ??
-                                'Your gateway to Grama Niladhari services',
-                            style: Theme.of(context).textTheme.bodyMedium,
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${localizations?.translate('welcome_message') ?? 'Welcome'}, ${user?.name ?? 'User'}!',
+                                  style: Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  localizations?.translate('welcome_subtitle') ??
+                                      'Your gateway to Grama Niladhari services',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ), 
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+
+              
             const SizedBox(height: 24),
 
             // Quick Services Section
@@ -172,7 +183,7 @@ class HomePage extends StatelessWidget {
               children: [
                 _QuickServiceCard(
                   icon: Icons.article_outlined,
-                  title: localizations?.birthCertificate ?? 'Birth Certificate',
+                  title: localizations?.marriageCertificate ?? 'Marriage Certificate',
                   color: Colors.blue,
                   onTap: () {
                     Navigator.pushNamed(context, '/services');
