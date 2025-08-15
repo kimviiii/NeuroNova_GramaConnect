@@ -419,6 +419,72 @@ def submit_character_certificate():
     except Exception as e:
         return jsonify({'error': f'Character certificate application failed: {str(e)}'}), 500
 
+# Voter Registration Update Service Endpoint
+@app.route('/api/services/voter-registration', methods=['POST'])
+def submit_voter_registration():
+    if db is None:
+        return jsonify({'error': 'Database not connected'}), 500
+    
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({'error': 'Authorization token required'}), 401
+        
+        # Extract token
+        token = auth_header.split(' ')[1]
+        user_id = verify_token(token)
+        
+        if not user_id:
+            return jsonify({'error': 'Invalid or expired token'}), 401
+        
+        # Get request data
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = [
+            'applicantName', 'nicNumber', 'updateType'
+        ]
+        
+        for field in required_fields:
+            if not data or not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+        
+        # Create application document
+        application_doc = {
+            'user_id': user_id,
+            'service_type': 'voter_registration',
+            'applicant_name': data.get('applicantName').strip(),
+            'nic_number': data.get('nicNumber').strip(),
+            'update_type': data.get('updateType').strip(),
+            'current_address': data.get('currentAddress', '').strip(),
+            'new_address': data.get('newAddress', '').strip(),
+            'current_polling_division': data.get('currentPollingDivision', '').strip(),
+            'new_polling_division': data.get('newPollingDivision', '').strip(),
+            'contact_number': data.get('contactNumber', '').strip(),
+            'reason_for_change': data.get('reasonForChange', '').strip(),
+            'status': 'pending',
+            'created_at': datetime.utcnow(),
+            'updated_at': datetime.utcnow(),
+            'reference_number': f"VR{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+        }
+        
+        # Insert application into database
+        applications_collection = db.applications
+        result = applications_collection.insert_one(application_doc)
+        
+        # Return success response
+        return jsonify({
+            'message': 'Voter registration update application submitted successfully',
+            'application_id': str(result.inserted_id),
+            'reference_number': application_doc['reference_number'],
+            'status': 'pending',
+            'estimated_processing_time': '7-14 working days'
+        }), 201
+        
+    except Exception as e:
+        return jsonify({'error': f'Voter registration application failed: {str(e)}'}), 500
+
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

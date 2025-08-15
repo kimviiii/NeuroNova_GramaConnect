@@ -11,6 +11,7 @@ import 'screens/auth/multi_step_register_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/services/services_screen.dart';
 import 'screens/services/character_certificate_screen.dart';
+import 'screens/services/voter_registration_screen.dart';
 import 'screens/complaints/complaints_screen.dart';
 import 'screens/announcements/announcements_screen.dart';
 import 'screens/profile/profile_screen.dart';
@@ -65,6 +66,8 @@ class MyApp extends StatelessWidget {
             '/services': (context) => const ServicesScreen(),
             '/character-certificate': (context) =>
                 const CharacterCertificateScreen(),
+            '/voter-registration': (context) =>
+                const VoterRegistrationScreen(),
             '/complaints': (context) => const ComplaintsScreen(),
             '/announcements': (context) => const AnnouncementsScreen(),
             '/profile': (context) => const ProfileScreen(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../utils/app_localizations.dart';
 import 'marriage_certificate_screen.dart';
 import 'character_certificate_screen.dart';
+import 'voter_registration_screen.dart';
 
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
@@ -64,7 +65,12 @@ class ServicesScreen extends StatelessWidget {
             fee: 'Free',
             color: Colors.blue,
             onTap: () {
-              // TODO: Add voter registration screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const VoterRegistrationScreen(),
+                ),
+              );
             },
           ),
         ],
