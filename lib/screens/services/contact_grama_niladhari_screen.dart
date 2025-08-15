@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gramaconnect/utils/theme.dart';
 import 'package:provider/provider.dart';
 // import 'package:url_launcher/url_launcher.dart';  // Commented out temporarily
 import '../../providers/auth_provider.dart';
@@ -244,7 +245,7 @@ class _ContactGramaNiladhariScreenState extends State<ContactGramaNiladhariScree
           ),
         ),
         title: const Text('Contact Grama Niladhari'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: AppColors.primary,
       ),
       body: Column(
         children: [
