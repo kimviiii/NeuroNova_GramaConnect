@@ -14,25 +14,21 @@ class MarriageCertificateScreen extends StatefulWidget {
 
 class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _applicantNameController = TextEditingController();
-  final _spouseNameController = TextEditingController();
+  final _groomNameController = TextEditingController();
+  final _brideNameController = TextEditingController();
   final _marriagePlaceController = TextEditingController();
-  final _applicantNicController = TextEditingController();
-  final _spouseNicController = TextEditingController();
-  final _contactNumberController = TextEditingController();
-  final _addressController = TextEditingController();
+  final _groomNicController = TextEditingController();
+  final _brideNicController = TextEditingController();
   DateTime? _marriageDate;
   bool _isLoading = false;
 
   @override
   void dispose() {
-    _applicantNameController.dispose();
-    _spouseNameController.dispose();
+    _groomNameController.dispose();
+    _brideNameController.dispose();
     _marriagePlaceController.dispose();
-    _applicantNicController.dispose();
-    _spouseNicController.dispose();
-    _contactNumberController.dispose();
-    _addressController.dispose();
+    _groomNicController.dispose();
+    _brideNicController.dispose();
     super.dispose();
   }
 
@@ -96,44 +92,40 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
                   ),
                   const SizedBox(height: 30),
 
-                  // Applicant Details Section
-                  _buildSectionHeader('Applicant Details'),
+                  // Groom Details Section
+                  _buildSectionHeader('Groom Details'),
                   _buildTextField(
-                    controller: _applicantNameController,
-                    label: 'Applicant Full Name',
+                    controller: _groomNameController,
+                    label: 'Groom Full Name',
                     icon: Icons.person,
                     validator: (value) => value?.isEmpty ?? true
-                        ? 'Applicant name is required'
+                        ? 'Groom name is required'
                         : null,
                   ),
                   _buildTextField(
-                    controller: _applicantNicController,
-                    label: 'Applicant NIC Number',
+                    controller: _groomNicController,
+                    label: 'Groom NIC Number',
                     icon: Icons.credit_card,
-                    validator: (value) => value?.isEmpty ?? true
-                        ? 'Applicant NIC is required'
-                        : null,
+                    validator: (value) =>
+                        value?.isEmpty ?? true ? 'Groom NIC is required' : null,
                   ),
 
                   const SizedBox(height: 20),
 
-                  // Spouse Details Section
-                  _buildSectionHeader('Spouse Details'),
+                  // Bride Details Section
+                  _buildSectionHeader('Bride Details'),
                   _buildTextField(
-                    controller: _spouseNameController,
-                    label: 'Spouse Full Name',
+                    controller: _brideNameController,
+                    label: 'Bride Full Name',
                     icon: Icons.person,
                     validator: (value) => value?.isEmpty ?? true
-                        ? 'Spouse name is required'
+                        ? 'Bride name is required'
                         : null,
                   ),
                   _buildTextField(
-                    controller: _spouseNicController,
-                    label: 'Spouse NIC Number',
+                    controller: _brideNicController,
+                    label: 'Bride NIC Number (Optional)',
                     icon: Icons.credit_card,
-                    validator: (value) => value?.isEmpty ?? true
-                        ? 'Spouse NIC is required'
-                        : null,
                   ),
 
                   const SizedBox(height: 20),
@@ -148,21 +140,6 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
                     validator: (value) => value?.isEmpty ?? true
                         ? 'Marriage place is required'
                         : null,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Contact Information Section
-                  _buildSectionHeader('Contact Information'),
-                  _buildTextField(
-                    controller: _contactNumberController,
-                    label: 'Contact Number (Optional)',
-                    icon: Icons.phone,
-                  ),
-                  _buildTextField(
-                    controller: _addressController,
-                    label: 'Address (Optional)',
-                    icon: Icons.home,
                   ),
 
                   const SizedBox(height: 40),
@@ -314,21 +291,23 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
         final token = authProvider.token;
 
+        print('🔍 Debug: Token available: ${token != null}');
+        print('🔍 Debug: User authenticated: ${authProvider.isAuthenticated}');
+        print('🔍 Debug: Token value: ${token?.substring(0, 20) ?? 'null'}...');
+
         if (token == null) {
           throw Exception('Not authenticated');
         }
 
         final applicationData = {
-          'applicantName': _applicantNameController.text.trim(),
-          'spouseName': _spouseNameController.text.trim(),
+          'applicantName': _groomNameController.text.trim(),
+          'spouseName': _brideNameController.text.trim(),
           'marriageDate': _marriageDate!
               .toIso8601String()
               .split('T')[0], // YYYY-MM-DD format
           'marriagePlace': _marriagePlaceController.text.trim(),
-          'applicantNIC': _applicantNicController.text.trim(),
-          'spouseNIC': _spouseNicController.text.trim(),
-          'contactNumber': _contactNumberController.text.trim(),
-          'address': _addressController.text.trim(),
+          'applicantNIC': _groomNicController.text.trim(),
+          'spouseNIC': _brideNicController.text.trim(),
         };
 
         final response = await ApiService.submitMarriageCertificate(

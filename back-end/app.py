@@ -145,12 +145,6 @@ def register():
         address = data.get('address', '').strip()
         nic = data.get('nic', '').strip()
         
-        # Additional fields for multi-step registration
-        district = data.get('district', '').strip()
-        divisional_secretariat = data.get('divisional_secretariat', '').strip()
-        grama_niladhari_division = data.get('grama_niladhari_division', '').strip()
-        role = data.get('role', 'citizen')
-        
         # Check if user already exists
         users_collection = db.users
         if users_collection.find_one({'email': email}):
@@ -167,10 +161,7 @@ def register():
             'phone': phone,
             'address': address,
             'nic': nic,
-            'district': district,
-            'divisional_secretariat': divisional_secretariat,
-            'grama_niladhari_division': grama_niladhari_division,
-            'role': role,
+            'role': 'citizen',
             'created_at': datetime.utcnow()
         }
         
@@ -188,10 +179,7 @@ def register():
             'phone': phone,
             'address': address,
             'nic': nic,
-            'district': district,
-            'divisional_secretariat': divisional_secretariat,
-            'grama_niladhari_division': grama_niladhari_division,
-            'role': role,
+            'role': 'citizen',
             'created_at': user_doc['created_at'].isoformat()
         }
         

@@ -23,12 +23,14 @@ class AuthProvider with ChangeNotifier {
     final userId = prefs.getString('user_id');
     final userEmail = prefs.getString('user_email');
     final userName = prefs.getString('user_name');
+    final userToken = prefs.getString('user_token');
 
     if (userId != null && userEmail != null && userName != null) {
       _user = User(
         id: userId,
         email: userEmail,
         name: userName,
+        token: userToken, // Include the token when loading from storage
       );
       notifyListeners();
     }
@@ -124,6 +126,7 @@ class AuthProvider with ChangeNotifier {
     await prefs.remove('user_id');
     await prefs.remove('user_email');
     await prefs.remove('user_name');
+    await prefs.remove('user_token'); // Clear the token on logout
     notifyListeners();
   }
 
@@ -132,6 +135,10 @@ class AuthProvider with ChangeNotifier {
     await prefs.setString('user_id', user.id);
     await prefs.setString('user_email', user.email);
     await prefs.setString('user_name', user.name);
+    // Save the token to SharedPreferences so it persists across app restarts
+    if (user.token != null) {
+      await prefs.setString('user_token', user.token!);
+    }
   }
 
   void clearError() {

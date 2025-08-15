@@ -80,8 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class HomePage extends StatelessWidget {
-  final VoidCallback? onProfileTap;
-  const HomePage({super.key, this.onProfileTap});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +119,8 @@ class HomePage extends StatelessWidget {
                         Navigator.pushNamed(context, '/profile');
                       },
               child: Card(
+         
+                      
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Row(
