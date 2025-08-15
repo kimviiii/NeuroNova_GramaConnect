@@ -5,6 +5,9 @@ class User {
   final String? phone;
   final String? address;
   final String? nic;
+  final String? district;
+  final String? divisionalSecretariat;
+  final String? gramaNiladhariDivision;
   final String role;
   final DateTime? createdAt;
   final String? token;
@@ -16,6 +19,9 @@ class User {
     this.phone,
     this.address,
     this.nic,
+    this.district,
+    this.divisionalSecretariat,
+    this.gramaNiladhariDivision,
     this.role = 'citizen',
     this.createdAt,
     this.token,
@@ -29,6 +35,9 @@ class User {
       phone: json['phone'],
       address: json['address'],
       nic: json['nic'],
+      district: json['district'],
+      divisionalSecretariat: json['divisional_secretariat'],
+      gramaNiladhariDivision: json['grama_niladhari_division'],
       role: json['role'] ?? 'citizen',
       token: json['token'],
       createdAt:
@@ -44,6 +53,9 @@ class User {
       'phone': phone,
       'address': address,
       'nic': nic,
+      'district': district,
+      'divisional_secretariat': divisionalSecretariat,
+      'grama_niladhari_division': gramaNiladhariDivision,
       'role': role,
       'createdAt': createdAt?.toIso8601String(),
     };
@@ -56,6 +68,9 @@ class User {
     String? phone,
     String? address,
     String? nic,
+    String? district,
+    String? divisionalSecretariat,
+    String? gramaNiladhariDivision,
     String? role,
     DateTime? createdAt,
   }) {
@@ -66,6 +81,11 @@ class User {
       phone: phone ?? this.phone,
       address: address ?? this.address,
       nic: nic ?? this.nic,
+      district: district ?? this.district,
+      divisionalSecretariat:
+          divisionalSecretariat ?? this.divisionalSecretariat,
+      gramaNiladhariDivision:
+          gramaNiladhariDivision ?? this.gramaNiladhariDivision,
       role: role ?? this.role,
       createdAt: createdAt ?? this.createdAt,
     );
