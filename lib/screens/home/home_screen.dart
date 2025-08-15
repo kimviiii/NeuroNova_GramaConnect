@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
@@ -80,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final VoidCallback? onProfileTap;
+  const HomePage({super.key, this.onProfileTap});
 
   @override
   Widget build(BuildContext context) {
@@ -115,14 +118,8 @@ class HomePage extends StatelessWidget {
           children: [
             // Welcome Card
             Card(
-                
                   child: ListTile(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/profile');
-                    },
-
-
-
+                    
                     leading: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Row(
@@ -160,6 +157,9 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                     ),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/profile');
+                    }
                   ),
                 ),
 
