@@ -120,8 +120,6 @@ class HomePage extends StatelessWidget {
                         Navigator.pushNamed(context, '/profile');
                       },
               child: Card(
-         
-                      
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Row(
