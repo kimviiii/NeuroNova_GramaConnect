@@ -392,4 +392,79 @@ class ApiService {
       throw Exception('Failed to get applications: $e');
     }
   }
+
+  // Grama Niladhari Contact endpoints
+  static Future<List<Map<String, dynamic>>> getGramaNiladhariByDistrict({
+    required String token,
+    required String district,
+  }) async {
+    try {
+      print('🔍 Getting Grama Niladhari officials for district: $district');
+
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/api/grama-niladhari/district/$district'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(timeoutDuration);
+
+      print('📡 Grama Niladhari Response: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return List<Map<String, dynamic>>.from(data['grama_niladhari_officials']);
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['error'] ?? 'Failed to fetch officials');
+      }
+    } catch (e) {
+      print('❌ Grama Niladhari Error: $e');
+      throw Exception('Network error: $e');
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> searchGramaNiladhari({
+    required String token,
+    String? district,
+    String? division,
+    String? name,
+  }) async {
+    try {
+      print('🔍 Searching Grama Niladhari officials');
+
+      final queryParams = <String, String>{};
+      if (district != null && district.isNotEmpty) queryParams['district'] = district;
+      if (division != null && division.isNotEmpty) queryParams['division'] = division;
+      if (name != null && name.isNotEmpty) queryParams['name'] = name;
+
+      final uri = Uri.parse('$baseUrl/api/grama-niladhari/search')
+          .replace(queryParameters: queryParams);
+
+      final response = await http
+          .get(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(timeoutDuration);
+
+      print('📡 Grama Niladhari Search Response: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return List<Map<String, dynamic>>.from(data['grama_niladhari_officials']);
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['error'] ?? 'Search failed');
+      }
+    } catch (e) {
+      print('❌ Grama Niladhari Search Error: $e');
+      throw Exception('Network error: $e');
+    }
+  }
 }
