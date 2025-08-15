@@ -12,7 +12,7 @@ class ApiService {
       return 'http://127.0.0.1:5000';
     } else if (Platform.isAndroid) {
       // For Android emulator (maps to host's 127.0.0.1)
-      return 'http://10.0.2.2:5000';
+      return 'http://192.168.34.215:5000';
     } else {
       // For iOS simulator and other platforms
       return 'http://127.0.0.1:5000';

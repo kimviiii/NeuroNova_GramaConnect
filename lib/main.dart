@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gramaconnect/screens/services/marriage_certificate_screen.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/language_provider.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
             '/complaints': (context) => const ComplaintsScreen(),
             '/announcements': (context) => const AnnouncementsScreen(),
             '/profile': (context) => const ProfileScreen(),
+            '/marriage': (context) => const MarriageCertificateScreen(),
           },
         );
       },

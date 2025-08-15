@@ -22,7 +22,18 @@ class AppColors {
 class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
+      brightness: Brightness.light,
+      primaryColor: AppColors.primary,
+      tabBarTheme: const TabBarThemeData(
+        labelColor: Color.fromARGB(255, 255, 255, 255), // Change to your desired color
+        unselectedLabelColor: Color.fromARGB(255, 182, 182, 182), // Change to your desired color
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 3),
+        ),
+      ),
+
       useMaterial3: true,
+      
 
       // Color Scheme
       colorScheme: const ColorScheme.light(
@@ -181,6 +192,15 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      tabBarTheme: const TabBarThemeData(
+        labelColor: Color.fromARGB(255, 255, 255, 255), // Selected tab color (dark mode)
+        unselectedLabelColor: Color.fromARGB(255, 182, 182, 182), // Unselected tab color (dark mode)
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 3),
+        ),
+      ),
+
+
 
       // Color Scheme
       colorScheme: const ColorScheme.dark(
