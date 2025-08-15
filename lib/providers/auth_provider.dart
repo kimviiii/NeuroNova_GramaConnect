@@ -12,6 +12,7 @@ class AuthProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get isAuthenticated => _user != null;
+  String? get token => _user?.token;
 
   AuthProvider() {
     _loadUserFromStorage();
@@ -22,12 +23,14 @@ class AuthProvider with ChangeNotifier {
     final userId = prefs.getString('user_id');
     final userEmail = prefs.getString('user_email');
     final userName = prefs.getString('user_name');
+    final userToken = prefs.getString('user_token');
 
     if (userId != null && userEmail != null && userName != null) {
       _user = User(
         id: userId,
         email: userEmail,
         name: userName,
+        token: userToken, // Include the token when loading from storage
       );
       notifyListeners();
     }
@@ -60,13 +63,43 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> register(String name, String email, String password) async {
+  Future<bool> register(String name, String email, String password,
+      {String? phone, String? address, String? nic}) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final user = await ApiService.register(name, email, password);
+      final user = await ApiService.register(name, email, password,
+          phone: phone, address: address, nic: nic);
+      if (user != null) {
+        _user = user;
+        await _saveUserToStorage(user);
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        _errorMessage = 'Registration failed';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _errorMessage = 'Registration failed: ${e.toString()}';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  // Multi-step registration method
+  Future<bool> registerWithFullData(Map<String, dynamic> userData) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final user = await ApiService.registerWithFullData(userData);
       if (user != null) {
         _user = user;
         await _saveUserToStorage(user);
@@ -93,6 +126,7 @@ class AuthProvider with ChangeNotifier {
     await prefs.remove('user_id');
     await prefs.remove('user_email');
     await prefs.remove('user_name');
+    await prefs.remove('user_token'); // Clear the token on logout
     notifyListeners();
   }
 
@@ -101,6 +135,10 @@ class AuthProvider with ChangeNotifier {
     await prefs.setString('user_id', user.id);
     await prefs.setString('user_email', user.email);
     await prefs.setString('user_name', user.name);
+    // Save the token to SharedPreferences so it persists across app restarts
+    if (user.token != null) {
+      await prefs.setString('user_token', user.token!);
+    }
   }
 
   void clearError() {

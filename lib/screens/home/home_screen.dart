@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:gramaconnect/screens/services/marriage_certificate_screen.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/app_localizations.dart';
 import '../services/services_screen.dart';
+import '../services/contact_grama_niladhari_screen.dart';
+import '../services/marriage_certificate_screen.dart';
+import '../services/character_certificate_screen.dart';
 import '../complaints/complaints_screen.dart';
 import '../announcements/announcements_screen.dart';
 import '../profile/profile_screen.dart';
+import '../services/character_certificate_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -80,7 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final VoidCallback? onProfileTap;
+  const HomePage({super.key, this.onProfileTap});
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +96,15 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 48,
+            height: 48,
+            fit: BoxFit.contain,
+          ),
+        ),
         title: Text(localizations?.appName ?? 'GramaConnect'),
         actions: [
           IconButton(
@@ -105,45 +121,54 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Welcome Card
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: Text(
-                        user?.name.substring(0, 1).toUpperCase() ?? 'U',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+            InkWell(
+              onTap: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
+              child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Theme.of(context).primaryColor,
+                              child: Text(
+                                user?.name.substring(0, 1).toUpperCase() ?? 'U',
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${localizations?.translate('welcome_message') ?? 'Welcome'}, ${user?.name ?? 'User'}!',
+                                    style: Theme.of(context).textTheme.headlineSmall,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    localizations?.translate('welcome_subtitle') ??
+                                        'Your gateway to Grama Niladhari services',
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ), 
+                            ),
+                          ],
                         ),
                       ),
+                      
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${localizations?.translate('welcome_message') ?? 'Welcome'}, ${user?.name ?? 'User'}!',
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            localizations?.translate('welcome_subtitle') ??
-                                'Your gateway to Grama Niladhari services',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ),
+
+
+              
             const SizedBox(height: 24),
 
             // Quick Services Section
@@ -163,10 +188,15 @@ class HomePage extends StatelessWidget {
               children: [
                 _QuickServiceCard(
                   icon: Icons.article_outlined,
-                  title: localizations?.birthCertificate ?? 'Birth Certificate',
+                  title: localizations?.marriageCertificate ?? 'Marriage Certificate',
                   color: Colors.blue,
                   onTap: () {
-                    Navigator.pushNamed(context, '/services');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MarriageCertificateScreen(),
+                      ),
+                    );
                   },
                 ),
                 _QuickServiceCard(
@@ -175,7 +205,12 @@ class HomePage extends StatelessWidget {
                       'Character Certificate',
                   color: Colors.green,
                   onTap: () {
-                    Navigator.pushNamed(context, '/services');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CharacterCertificateScreen(),
+                      ),
+                    );
                   },
                 ),
                 _QuickServiceCard(
@@ -187,12 +222,16 @@ class HomePage extends StatelessWidget {
                   },
                 ),
                 _QuickServiceCard(
-                  icon: Icons.phone_outlined,
-                  title: localizations?.translate('contact_grama_niladhari') ??
-                      'Contact Office',
+                  icon: Icons.contacts_outlined,
+                  title: 'Contact Grama Niladhari',
                   color: Colors.purple,
                   onTap: () {
-                    // Handle contact
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ContactGramaNiladhariScreen(),
+                      ),
+                    );
                   },
                 ),
               ],
