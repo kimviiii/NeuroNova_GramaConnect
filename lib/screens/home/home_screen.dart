@@ -4,6 +4,8 @@ import '../../providers/auth_provider.dart';
 import '../../utils/app_localizations.dart';
 import '../services/services_screen.dart';
 import '../services/contact_grama_niladhari_screen.dart';
+import '../services/marriage_certificate_screen.dart';
+import '../services/character_certificate_screen.dart';
 import '../complaints/complaints_screen.dart';
 import '../announcements/announcements_screen.dart';
 import '../profile/profile_screen.dart';
@@ -186,7 +188,12 @@ class HomePage extends StatelessWidget {
                   title: localizations?.marriageCertificate ?? 'Marriage Certificate',
                   color: Colors.blue,
                   onTap: () {
-                    Navigator.pushNamed(context, '/services');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MarriageCertificateScreen(),
+                      ),
+                    );
                   },
                 ),
                 _QuickServiceCard(
@@ -195,7 +202,12 @@ class HomePage extends StatelessWidget {
                       'Character Certificate',
                   color: Colors.green,
                   onTap: () {
-                    Navigator.pushNamed(context, '/services');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CharacterCertificateScreen(),
+                      ),
+                    );
                   },
                 ),
                 _QuickServiceCard(
