@@ -353,6 +353,72 @@ def get_applications():
     except Exception as e:
         return jsonify({'error': f'Failed to retrieve applications: {str(e)}'}), 500
 
+# Character Certificate Service Endpoint
+@app.route('/api/services/character-certificate', methods=['POST'])
+def submit_character_certificate():
+    if db is None:
+        return jsonify({'error': 'Database not connected'}), 500
+    
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({'error': 'Authorization token required'}), 401
+        
+        # Extract token
+        token = auth_header.split(' ')[1]
+        user_id = verify_token(token)
+        
+        if not user_id:
+            return jsonify({'error': 'Invalid or expired token'}), 401
+        
+        # Get request data
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = [
+            'applicantName', 'nicNumber', 'purpose'
+        ]
+        
+        for field in required_fields:
+            if not data or not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+        
+        # Create application document
+        application_doc = {
+            'user_id': user_id,
+            'service_type': 'character_certificate',
+            'applicant_name': data.get('applicantName').strip(),
+            'nic_number': data.get('nicNumber').strip(),
+            'purpose': data.get('purpose').strip(),
+            'employment_details': data.get('employmentDetails', '').strip(),
+            'residence_address': data.get('residenceAddress', '').strip(),
+            'contact_number': data.get('contactNumber', '').strip(),
+            'period_of_residence': data.get('periodOfResidence', '').strip(),
+            'previous_residences': data.get('previousResidences', []),
+            'references': data.get('references', []),
+            'status': 'pending',
+            'created_at': datetime.utcnow(),
+            'updated_at': datetime.utcnow(),
+            'reference_number': f"CC{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+        }
+        
+        # Insert application into database
+        applications_collection = db.applications
+        result = applications_collection.insert_one(application_doc)
+        
+        # Return success response
+        return jsonify({
+            'message': 'Character certificate application submitted successfully',
+            'application_id': str(result.inserted_id),
+            'reference_number': application_doc['reference_number'],
+            'status': 'pending',
+            'estimated_processing_time': '14-21 working days'
+        }), 201
+        
+    except Exception as e:
+        return jsonify({'error': f'Character certificate application failed: {str(e)}'}), 500
+
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

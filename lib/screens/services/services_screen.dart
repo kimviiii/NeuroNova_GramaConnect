@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../utils/app_localizations.dart';
 import 'marriage_certificate_screen.dart';
+import 'character_certificate_screen.dart';
 
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
@@ -48,7 +49,12 @@ class ServicesScreen extends StatelessWidget {
             fee: 'LKR 300',
             color: Colors.green,
             onTap: () {
-              // TODO: Add character certificate screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CharacterCertificateScreen(),
+                ),
+              );
             },
           ),
           _ServiceCard(

@@ -10,6 +10,7 @@ import 'screens/auth/register_screen.dart';
 import 'screens/auth/multi_step_register_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/services/services_screen.dart';
+import 'screens/services/character_certificate_screen.dart';
 import 'screens/complaints/complaints_screen.dart';
 import 'screens/announcements/announcements_screen.dart';
 import 'screens/profile/profile_screen.dart';
@@ -58,9 +59,12 @@ class MyApp extends StatelessWidget {
             '/': (context) => const SplashScreen(),
             '/login': (context) => const LoginScreen(),
             '/register': (context) => const RegisterScreen(),
-            '/multi-step-register': (context) => const MultiStepRegisterScreen(),
+            '/multi-step-register': (context) =>
+                const MultiStepRegisterScreen(),
             '/home': (context) => const HomeScreen(),
             '/services': (context) => const ServicesScreen(),
+            '/character-certificate': (context) =>
+                const CharacterCertificateScreen(),
             '/complaints': (context) => const ComplaintsScreen(),
             '/announcements': (context) => const AnnouncementsScreen(),
             '/profile': (context) => const ProfileScreen(),
