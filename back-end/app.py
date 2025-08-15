@@ -240,6 +240,119 @@ def login():
     except Exception as e:
         return jsonify({'error': f'Login failed: {str(e)}'}), 500
 
+# Helper function to verify JWT token
+def verify_token(token):
+    try:
+        secret_key = os.getenv('SECRET_KEY', 'your-secret-key-gramaconnect-2025')
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        return payload.get('user_id')
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+# Marriage Certificate Service Endpoint
+@app.route('/api/services/marriage-certificate', methods=['POST'])
+def submit_marriage_certificate():
+    if db is None:
+        return jsonify({'error': 'Database not connected'}), 500
+    
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({'error': 'Authorization token required'}), 401
+        
+        # Extract token
+        token = auth_header.split(' ')[1]
+        user_id = verify_token(token)
+        
+        if not user_id:
+            return jsonify({'error': 'Invalid or expired token'}), 401
+        
+        # Get request data
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = [
+            'applicantName', 'spouseName', 'marriageDate', 
+            'marriagePlace', 'applicantNIC', 'spouseNIC'
+        ]
+        
+        for field in required_fields:
+            if not data or not data.get(field):
+                return jsonify({'error': f'{field} is required'}), 400
+        
+        # Create application document
+        application_doc = {
+            'user_id': user_id,
+            'service_type': 'marriage_certificate',
+            'applicant_name': data.get('applicantName').strip(),
+            'spouse_name': data.get('spouseName').strip(),
+            'marriage_date': data.get('marriageDate'),
+            'marriage_place': data.get('marriagePlace').strip(),
+            'applicant_nic': data.get('applicantNIC').strip(),
+            'spouse_nic': data.get('spouseNIC').strip(),
+            'contact_number': data.get('contactNumber', '').strip(),
+            'address': data.get('address', '').strip(),
+            'status': 'pending',
+            'created_at': datetime.utcnow(),
+            'updated_at': datetime.utcnow()
+        }
+        
+        # Insert application into database
+        applications_collection = db.applications
+        result = applications_collection.insert_one(application_doc)
+        
+        # Return success response
+        return jsonify({
+            'message': 'Marriage certificate application submitted successfully',
+            'application_id': str(result.inserted_id),
+            'status': 'pending'
+        }), 201
+        
+    except Exception as e:
+        return jsonify({'error': f'Marriage certificate application failed: {str(e)}'}), 500
+
+# Get Applications Endpoint (for user to view their applications)
+@app.route('/api/applications', methods=['GET'])
+def get_applications():
+    if db is None:
+        return jsonify({'error': 'Database not connected'}), 500
+    
+    try:
+        # Get authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({'error': 'Authorization token required'}), 401
+        
+        # Extract token
+        token = auth_header.split(' ')[1]
+        user_id = verify_token(token)
+        
+        if not user_id:
+            return jsonify({'error': 'Invalid or expired token'}), 401
+        
+        # Get user's applications
+        applications_collection = db.applications
+        applications = list(applications_collection.find({'user_id': user_id}))
+        
+        # Convert ObjectIds to strings
+        for app in applications:
+            app['_id'] = str(app['_id'])
+            if app.get('created_at'):
+                app['created_at'] = app['created_at'].isoformat()
+            if app.get('updated_at'):
+                app['updated_at'] = app['updated_at'].isoformat()
+        
+        return jsonify({
+            'message': 'Applications retrieved successfully',
+            'applications': applications
+        }), 200
+        
+    except Exception as e:
+        return jsonify({'error': f'Failed to retrieve applications: {str(e)}'}), 500
+
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

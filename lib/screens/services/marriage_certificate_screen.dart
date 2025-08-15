@@ -8,7 +8,8 @@ class MarriageCertificateScreen extends StatefulWidget {
   const MarriageCertificateScreen({super.key});
 
   @override
-  State<MarriageCertificateScreen> createState() => _MarriageCertificateScreenState();
+  State<MarriageCertificateScreen> createState() =>
+      _MarriageCertificateScreenState();
 }
 
 class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
@@ -66,7 +67,8 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
           child: Card(
             color: Colors.white,
             elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -89,40 +91,45 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  
+
                   // Groom Details Section
                   _buildSectionHeader('Groom Details'),
                   _buildTextField(
                     controller: _groomNameController,
                     label: 'Groom Full Name',
                     icon: Icons.person,
-                    validator: (value) => value?.isEmpty ?? true ? 'Groom name is required' : null,
+                    validator: (value) => value?.isEmpty ?? true
+                        ? 'Groom name is required'
+                        : null,
                   ),
                   _buildTextField(
                     controller: _groomNicController,
                     label: 'Groom NIC Number',
                     icon: Icons.credit_card,
-                    validator: (value) => value?.isEmpty ?? true ? 'Groom NIC is required' : null,
+                    validator: (value) =>
+                        value?.isEmpty ?? true ? 'Groom NIC is required' : null,
                   ),
-                  
+
                   const SizedBox(height: 20),
-                  
+
                   // Bride Details Section
                   _buildSectionHeader('Bride Details'),
                   _buildTextField(
                     controller: _brideNameController,
                     label: 'Bride Full Name',
                     icon: Icons.person,
-                    validator: (value) => value?.isEmpty ?? true ? 'Bride name is required' : null,
+                    validator: (value) => value?.isEmpty ?? true
+                        ? 'Bride name is required'
+                        : null,
                   ),
                   _buildTextField(
                     controller: _brideNicController,
                     label: 'Bride NIC Number (Optional)',
                     icon: Icons.credit_card,
                   ),
-                  
+
                   const SizedBox(height: 20),
-                  
+
                   // Marriage Details Section
                   _buildSectionHeader('Marriage Details'),
                   _buildDateField(),
@@ -130,11 +137,13 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
                     controller: _marriagePlaceController,
                     label: 'Place of Marriage',
                     icon: Icons.location_on,
-                    validator: (value) => value?.isEmpty ?? true ? 'Marriage place is required' : null,
+                    validator: (value) => value?.isEmpty ?? true
+                        ? 'Marriage place is required'
+                        : null,
                   ),
-                  
+
                   const SizedBox(height: 40),
-                  
+
                   // Submit Button
                   SizedBox(
                     width: double.infinity,
@@ -153,7 +162,8 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                               'Submit Application',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                     ),
                   ),
@@ -205,7 +215,8 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: AppColors.accent, width: 2),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         ),
         validator: validator,
       ),
@@ -254,11 +265,12 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
               Icon(Icons.calendar_today, color: Colors.grey[600]),
               const SizedBox(width: 12),
               Text(
-                _marriageDate == null 
-                    ? 'Select Marriage Date' 
+                _marriageDate == null
+                    ? 'Select Marriage Date'
                     : '${_marriageDate!.day}/${_marriageDate!.month}/${_marriageDate!.year}',
                 style: TextStyle(
-                  color: _marriageDate == null ? Colors.grey[600] : Colors.black87,
+                  color:
+                      _marriageDate == null ? Colors.grey[600] : Colors.black87,
                   fontSize: 16,
                 ),
               ),
@@ -279,17 +291,23 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
         final token = authProvider.token;
 
+        print('🔍 Debug: Token available: ${token != null}');
+        print('🔍 Debug: User authenticated: ${authProvider.isAuthenticated}');
+        print('🔍 Debug: Token value: ${token?.substring(0, 20) ?? 'null'}...');
+
         if (token == null) {
           throw Exception('Not authenticated');
         }
 
         final applicationData = {
-          'groom_name': _groomNameController.text,
-          'bride_name': _brideNameController.text,
-          'marriage_date': _marriageDate!.toIso8601String().split('T')[0], // YYYY-MM-DD format
-          'marriage_place': _marriagePlaceController.text,
-          'groom_nic': _groomNicController.text,
-          'bride_nic': _brideNicController.text,
+          'applicantName': _groomNameController.text.trim(),
+          'spouseName': _brideNameController.text.trim(),
+          'marriageDate': _marriageDate!
+              .toIso8601String()
+              .split('T')[0], // YYYY-MM-DD format
+          'marriagePlace': _marriagePlaceController.text.trim(),
+          'applicantNIC': _groomNicController.text.trim(),
+          'spouseNIC': _brideNicController.text.trim(),
         };
 
         final response = await ApiService.submitMarriageCertificate(
@@ -300,19 +318,21 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Application submitted successfully! Reference: ${response['application']['reference_number']}'),
+              content: Text(
+                  'Application submitted successfully! Application ID: ${response['application_id']}'),
               backgroundColor: Colors.green,
               duration: const Duration(seconds: 4),
             ),
           );
-          
+
           Navigator.pop(context);
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error: ${e.toString().replaceAll('Exception: ', '')}'),
+              content:
+                  Text('Error: ${e.toString().replaceAll('Exception: ', '')}'),
               backgroundColor: Colors.red,
               duration: const Duration(seconds: 4),
             ),
@@ -328,7 +348,8 @@ class _MarriageCertificateScreenState extends State<MarriageCertificateScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please fill all required fields and select marriage date'),
+          content:
+              Text('Please fill all required fields and select marriage date'),
           backgroundColor: Colors.orange,
         ),
       );
