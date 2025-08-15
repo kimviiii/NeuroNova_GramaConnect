@@ -485,6 +485,112 @@ def submit_voter_registration():
     except Exception as e:
         return jsonify({'error': f'Voter registration application failed: {str(e)}'}), 500
 
+# Grama Niladhari Contact Endpoints
+@app.route('/api/grama-niladhari/district/<district>', methods=['GET'])
+def get_grama_niladhari_by_district(district):
+    """
+    Get all Grama Niladhari officials by district
+    
+    Purpose: Allows citizens to find their local GN officials
+    Required: JWT authentication
+    """
+    if db is None:
+        return jsonify({'error': 'Database not connected'}), 500
+    
+    try:
+        # JWT Token Verification
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({'error': 'Authorization token required'}), 401
+        
+        # Extract token
+        token = auth_header.split(' ')[1]
+        user_id = verify_token(token)
+        
+        if not user_id:
+            return jsonify({'error': 'Invalid or expired token'}), 401
+        
+        # Get Grama Niladhari officials for the district
+        gn_collection = db.grama_niladhari
+        officials = list(gn_collection.find({
+            'district': {'$regex': f'^{district}$', '$options': 'i'},
+            'status': 'active'
+        }).sort('grama_niladhari_division', 1))
+        
+        # Convert ObjectId to string for JSON serialization
+        for official in officials:
+            official['_id'] = str(official['_id'])
+        
+        return jsonify({
+            'success': True,
+            'district': district,
+            'count': len(officials),
+            'grama_niladhari_officials': officials
+        }), 200
+        
+    except Exception as e:
+        print(f"Grama Niladhari fetch error: {str(e)}")
+        return jsonify({'error': f'Failed to fetch officials: {str(e)}'}), 500
+
+@app.route('/api/grama-niladhari/search', methods=['GET'])
+def search_grama_niladhari():
+    """
+    Search Grama Niladhari officials by various criteria
+    Query params: district, division, name
+    """
+    if db is None:
+        return jsonify({'error': 'Database not connected'}), 500
+    
+    try:
+        # JWT Token Verification
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({'error': 'Authorization token required'}), 401
+        
+        # Extract token
+        token = auth_header.split(' ')[1]
+        user_id = verify_token(token)
+        
+        if not user_id:
+            return jsonify({'error': 'Invalid or expired token'}), 401
+        
+        # Build search query from request parameters
+        search_query = {'status': 'active'}
+        
+        district = request.args.get('district')
+        division = request.args.get('division')
+        name = request.args.get('name')
+        
+        if district:
+            search_query['district'] = {'$regex': f'^{district}$', '$options': 'i'}
+        if division:
+            search_query['grama_niladhari_division'] = {'$regex': division, '$options': 'i'}
+        if name:
+            search_query['name'] = {'$regex': name, '$options': 'i'}
+        
+        # Execute search
+        gn_collection = db.grama_niladhari
+        officials = list(gn_collection.find(search_query).sort('district', 1).sort('grama_niladhari_division', 1))
+        
+        # Convert ObjectId to string for JSON serialization
+        for official in officials:
+            official['_id'] = str(official['_id'])
+        
+        return jsonify({
+            'success': True,
+            'search_criteria': {
+                'district': district,
+                'division': division,
+                'name': name
+            },
+            'count': len(officials),
+            'grama_niladhari_officials': officials
+        }), 200
+        
+    except Exception as e:
+        print(f"Grama Niladhari search error: {str(e)}")
+        return jsonify({'error': f'Search failed: {str(e)}'}), 500
+
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
