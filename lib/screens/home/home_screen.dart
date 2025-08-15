@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/app_localizations.dart';
 import '../services/services_screen.dart';
+import '../services/contact_grama_niladhari_screen.dart';
 import '../complaints/complaints_screen.dart';
 import '../announcements/announcements_screen.dart';
 import '../profile/profile_screen.dart';
@@ -206,12 +207,16 @@ class HomePage extends StatelessWidget {
                   },
                 ),
                 _QuickServiceCard(
-                  icon: Icons.phone_outlined,
-                  title: localizations?.translate('contact_grama_niladhari') ??
-                      'Contact Office',
+                  icon: Icons.contacts_outlined,
+                  title: 'Contact Grama Niladhari',
                   color: Colors.purple,
                   onTap: () {
-                    // Handle contact
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ContactGramaNiladhariScreen(),
+                      ),
+                    );
                   },
                 ),
               ],

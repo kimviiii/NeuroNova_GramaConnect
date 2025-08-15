@@ -3,7 +3,6 @@ import '../../utils/app_localizations.dart';
 import 'marriage_certificate_screen.dart';
 import 'character_certificate_screen.dart';
 import 'voter_registration_screen.dart';
-import 'contact_grama_niladhari_screen.dart';
 
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
@@ -72,29 +71,6 @@ class ServicesScreen extends StatelessWidget {
                   builder: (context) => const VoterRegistrationScreen(),
                 ),
               );
-            },
-          ),
-          _ServiceCard(
-            icon: Icons.contacts_outlined,
-            title: 'Contact Grama Niladhari',
-            description: 'Find and contact your local Grama Niladhari officials',
-            fee: 'Free',
-            color: Colors.purple,
-            onTap: () {
-              print('🔍 Contact Grama Niladhari tapped!');
-              try {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ContactGramaNiladhariScreen(),
-                  ),
-                );
-              } catch (e) {
-                print('❌ Navigation error: $e');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error: $e')),
-                );
-              }
             },
           ),
         ],
