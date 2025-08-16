@@ -44,7 +44,7 @@ docker-compose up -d
 docker exec -it gramaconnect_mongodb mongorestore /database_dump
 
 5. **Access the Application**:
-- The backend API will be available at: http://localhost:5000
+- The backend API will be available at: http://localhost:5000 (or http://localhost:5000 in some cases)
 - The frontend will be available at: http://localhost:3000 (if applicable)
 
 ## 🛠️ Technologies Used
