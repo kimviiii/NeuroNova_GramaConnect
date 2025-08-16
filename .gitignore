@@ -61,3 +61,4 @@ venv.bak/
 *.db
 instance/
 back-end/.venv/
+database_dump/
