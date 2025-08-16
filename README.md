@@ -34,7 +34,7 @@ GramaConnect is a digital platform that streamlines the Grama Niladhari certific
 
 2. **Download and Extract the Database**:
 
-Download the database dump: GramaConnect Database Dump
+Download the database dump: <a href="https://drive.google.com/file/d/1trWZRmY6p7G4oTb6U2G9-T0pB0liViHm/view?usp=sharing">GramaConnect Database Dump</a>
 Extract the zip file to create a database_dump folder in the project root directory
 
 3. **Start the Docker Containers**:
