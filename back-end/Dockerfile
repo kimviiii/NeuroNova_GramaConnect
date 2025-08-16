@@ -10,8 +10,11 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
+# Copy the application code (excluding .env file)
 COPY . .
+
+# Make sure .env isn't included in the image
+RUN rm -f .env || true
 
 # Expose the port the app runs on
 EXPOSE 5000
