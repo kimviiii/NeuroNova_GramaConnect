@@ -1,8 +1,6 @@
 # 🏡 GramaConnect
 
 <div align="center">
-  <img src="https://via.placeholder.com/150?text=GramaConnect" alt="GramaConnect Logo" width="150"/>
-  <br>
   <h3>Streamlining Grama Niladhari Certificate Applications in Sri Lanka</h3>
   
   ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
